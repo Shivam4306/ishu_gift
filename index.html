@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Birthday Surprise 💖</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+*{box-sizing:border-box;font-family:'Segoe UI',sans-serif;scroll-behavior:smooth}
+
+body{
+  margin:0;
+  background:linear-gradient(135deg,#f7e7d9,#f3e8ff);
+  overflow-x:hidden;
+  position:relative;
+}
+
+/* FLOATING HEARTS BACKGROUND */
+.hearts{
+  position:fixed;
+  width:100%;
+  height:100%;
+  pointer-events:none;
+  overflow:hidden;
+  z-index:-1;
+}
+
+.heart{
+  position:absolute;
+  bottom:-20px;
+  font-size:20px;
+  animation:floatUp 8s linear infinite;
+  opacity:0.6;
+}
+
+@keyframes floatUp{
+  0%{transform:translateY(0) scale(0.5);opacity:0.8}
+  50%{opacity:0.6}
+  100%{transform:translateY(-120vh) scale(1);opacity:0}
+}
+
+/* COMMON */
+.screen{
+  display:none;
+  min-height:100vh;
+  align-items:center;
+  justify-content:center;
+  animation:screenFadeIn 0.8s ease;
+}
+
+@keyframes screenFadeIn{
+  from{opacity:0}
+  to{opacity:1}
+}
+
+.active{display:flex !important}
+
+/* LOADING */
+#loading{
+  position:fixed;inset:0;
+  background:linear-gradient(135deg,#ffd6e8,#e9d5ff);
+  flex-direction:column;
+  z-index:10;
+}
+
+.loader{
+  font-size:26px;
+  color:#7b3fe4;
+  animation:pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse{
+  0%,100%{opacity:0.6;transform:scale(1)}
+  50%{opacity:1;transform:scale(1.1)}
+}
+
+/* CARD */
+.card{
+  background:linear-gradient(180deg,#fff,#ffe6f0);
+  border-radius:30px;
+  padding:40px;
+  width:360px;
+  text-align:center;
+  box-shadow:0 25px 50px rgba(0,0,0,.15);
+  animation:slideUp 0.8s cubic-bezier(0.34,1.56,0.64,1);
+  backdrop-filter:blur(10px);
+  border:1px solid rgba(255,255,255,.8);
+  transition:all 0.3s ease;
+}
+
+.card:hover{
+  transform:translateY(-8px);
+  box-shadow:0 35px 70px rgba(123,63,228,.2);
+}
+
+@keyframes slideUp{
+  from{opacity:0;transform:translateY(50px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+h2{
+  color:#7b3fe4;
+  font-size:32px;
+  letter-spacing:1px;
+  margin:15px 0;
+  animation:fadeInDown 1s ease 0.2s both;
+}
+
+h3{color:#7b3fe4;font-size:24px}
+
+p{
+  color:#555;
+  font-size:15px;
+  line-height:1.8;
+  animation:fadeInUp 1s ease 0.3s both;
+}
+
+@keyframes fadeInDown{
+  from{opacity:0;transform:translateY(-20px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+@keyframes fadeInUp{
+  from{opacity:0;transform:translateY(20px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+button{
+  background:linear-gradient(135deg,#c084fc,#f472b6);
+  border:none;
+  color:white;
+  padding:14px 28px;
+  border-radius:25px;
+  font-size:15px;
+  font-weight:600;
+  cursor:pointer;
+  margin-top:20px;
+  transition:all 0.4s ease;
+  box-shadow:0 10px 25px rgba(196,132,252,.3);
+  position:relative;
+  overflow:hidden;
+}
+
+button:before{
+  content:'';
+  position:absolute;
+  top:0;left:-100%;
+  width:100%;
+  height:100%;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.3),transparent);
+  transition:left 0.5s;
+}
+
+button:hover{
+  transform:translateY(-3px) scale(1.05);
+  box-shadow:0 15px 35px rgba(196,132,252,.4);
+}
+
+button:hover:before{left:100%}
+
+/* CAKE ANIMATION */
+.cake{
+  font-size:100px;
+  animation:bounce 0.8s ease-in-out infinite;
+}
+
+@keyframes bounce{
+  0%,100%{transform:translateY(0) scale(1)}
+  50%{transform:translateY(-20px) scale(1.1)}
+}
+
+.candle{
+  font-size:40px;
+  animation:flicker 0.5s ease-in-out infinite;
+  transition:all 0.6s ease;
+}
+
+@keyframes flicker{
+  0%,100%{opacity:1}
+  50%{opacity:0.7}
+}
+
+.candle.lit{
+  animation:glow 1s ease-in-out infinite;
+  text-shadow:0 0 10px #ff6b6b, 0 0 20px #ff6b6b, 0 0 30px #ff6b6b;
+  filter:drop-shadow(0 0 8px #ff6b6b);
+}
+
+@keyframes glow{
+  0%,100%{transform:scale(1) drop-shadow(0 0 10px #ff6b6b)}
+  50%{transform:scale(1.15) drop-shadow(0 0 25px #ff6b6b)}
+}
+
+.blow{
+  opacity:0;
+  transform:scale(0);
+  transition:all 0.6s ease;
+}
+
+/* BALLOONS */
+.balloons{
+  display:flex;
+  justify-content:space-around;
+  margin-top:30px;
+  gap:15px;
+}
+
+.balloon{
+  font-size:50px;
+  cursor:pointer;
+  transition:all 0.4s ease;
+  animation:float 3s ease-in-out infinite;
+  filter:drop-shadow(0 5px 10px rgba(0,0,0,.1));
+}
+
+.balloon:hover{
+  transform:scale(1.2);
+  filter:drop-shadow(0 8px 20px rgba(244,114,182,.4));
+}
+
+.balloon.pop{
+  animation:popBalloon 0.6s ease forwards;
+}
+
+@keyframes float{
+  0%,100%{transform:translateY(0) rotate(0deg)}
+  25%{transform:translateY(-15px) rotate(5deg)}
+  75%{transform:translateY(-15px) rotate(-5deg)}
+}
+
+@keyframes popBalloon{
+  0%{transform:scale(1) rotate(0deg)}
+  50%{transform:scale(0.8) rotate(10deg)}
+  100%{transform:scale(0) rotate(20deg)}
+}
+
+/* POP TEXT */
+.pop-text{
+  position:absolute;
+  background:linear-gradient(135deg,#fff,#ffe6f0);
+  padding:8px 16px;
+  border-radius:20px;
+  font-size:14px;
+  font-weight:600;
+  color:#7b3fe4;
+  box-shadow:0 8px 20px rgba(123,63,228,.3);
+  animation:popFloatUp 2s ease forwards;
+  border:1px solid rgba(123,63,228,.2);
+}
+
+@keyframes popFloatUp{
+  0%{opacity:0;transform:translateY(0) scale(0.8)}
+  20%{opacity:1;transform:translateY(-10px) scale(1)}
+  100%{opacity:0;transform:translateY(-50px) scale(0.8)}
+}
+
+/* GALLERY */
+#gallery{
+  align-items:center;
+  padding:60px 20px;
+  background:linear-gradient(135deg,#ffe6f0,#f3e8ff);
+  flex-direction:column;
+}
+
+.collage{
+  width:100%;
+  max-width:1000px;
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  gap:25px;
+  padding:40px 20px;
+  align-items:center;
+}
+
+.media{
+  width:160px;
+  height:220px;
+  border-radius:20px;
+  box-shadow:0 15px 40px rgba(0,0,0,.2);
+  animation:floatMedia 5s ease-in-out infinite;
+  object-fit:cover;
+  border:5px solid white;
+  transition:all 0.4s ease;
+}
+
+.media:hover{
+  transform:scale(1.1);
+  z-index:10;
+  box-shadow:0 25px 50px rgba(123,63,228,.4);
+}
+
+video.media{
+  width:180px;
+  height:240px;
+}
+
+@keyframes floatMedia{
+  0%,100%{transform:translateY(0) rotate(0deg)}
+  25%{transform:translateY(-15px) rotate(2deg)}
+  50%{transform:translateY(-30px) rotate(-2deg)}
+  75%{transform:translateY(-15px) rotate(2deg)}
+}
+
+.gallery-title{
+  font-size:24px;
+  color:#7b3fe4;
+  margin-bottom:20px;
+  font-weight:bold;
+  animation:fadeInDown 1s ease;
+}
+
+/* NEXT BUTTON */
+#scrollNext{
+  display:block !important;
+  position:relative;
+  margin-top:40px;
+  animation:slideIn 0.8s ease;
+}
+
+@keyframes slideIn{
+  from{transform:translateX(150px);opacity:0}
+  to{transform:translateX(0);opacity:1}
+}
+
+/* FINAL PAGES */
+#wish, #finalLove{
+  background:linear-gradient(135deg,#ffe6f0,#f3e8ff);
+}
+
+.signature{
+  margin-top:25px;
+  font-weight:bold;
+  color:#7b3fe4;
+  font-size:18px;
+  animation:fadeInUp 1s ease 0.5s both;
+}
+</style>
+</head>
+
+<body>
+
+<!-- FLOATING HEARTS -->
+<div class="hearts"></div>
+
+<!-- LOADING -->
+<div id="loading" class="screen active">
+  <div style="font-size:60px;animation:bounce 0.8s ease-in-out infinite">💖</div>
+  <div class="loader">Loading Your Surprise...</div>
+</div>
+
+<!-- CUTIE -->
+<div id="cutie" class="screen">
+  <div class="card">
+    <div style="font-size:80px;animation:bounce 0.8s ease-in-out infinite">🐼</div>
+    <h2>March 4, 2026 ✨</h2>
+    <p style="font-size:18px; margin:15px 0; animation:fadeInUp 1s ease 0.3s both;">The day my cutiepie was born 💕</p>
+    <p style="font-size:16px; color:#d946a6; animation:fadeInUp 1s ease 0.4s both;">That's you, Ishu 🐼❤️</p>
+    <button onclick="show('cake')" style="animation:fadeInUp 1s ease 0.5s both;">🎁 Start the Magic</button>
+  </div>
+</div>
+
+<!-- CAKE -->
+<div id="cake" class="screen">
+  <div class="card">
+    <div class="cake">🎂</div>
+    <div id="candle" class="candle">🔥</div>
+    <button onclick="blow()">🕯️ Light candle</button>
+  </div>
+</div>
+
+<!-- BALLOONS -->
+<div id="balloon" class="screen">
+  <div class="card">
+    <h3>Pop all balloons 🎈</h3>
+    <p style="font-size:13px;color:#9b5de5">Pop the balloons one by one 🎈✨</p>
+    <div class="balloons">
+      <div class="balloon" onclick="pop(this,'It’s your day 💖')">🎈</div>
+      <div class="balloon" onclick="pop(this,'You are special 😘')">🎈</div>
+      <div class="balloon" onclick="pop(this,'Smile always ✨')">🎈</div>
+      <div class="balloon" onclick="pop(this,'I love you Ishu 🐼❤️')">🎈</div>
+    </div>
+    <button id="nextBtn" style="display:none" onclick="show('gallery')">
+      View Our Memories 💕
+    </button>
+  </div>
+</div>
+
+<!-- GALLERY -->
+<div id="gallery" class="screen">
+  <div class="gallery-title">Our Beautiful Memories 💕✨</div>
+  <div class="collage">
+    <img src="/photo/1.jpeg" class="media">
+    <img src="/photo/2.jpeg" class="media">
+    <img src="/photo/3.jpeg" class="media">
+    <img src="/photo/4.jpeg" class="media">
+    <img src="/photo/5.jpeg" class="media">
+    <img src="/photo/6.jpeg" class="media">
+    <img src="/photo/7.jpeg" class="media">
+    <img src="/photo/8.jpeg" class="media">
+    <img src="/photo/9.jpeg" class="media">
+    <video src="/photo/v1.mp4" class="media" autoplay muted loop></video>
+    <video src="/photo/v2.mp4" class="media" autoplay muted loop></video>
+  </div>
+  <button id="scrollNext" onclick="show('wish')">Continue to Your Wishes 💖</button>
+</div>
+
+<!-- WISH PAGE -->
+<div id="wish" class="screen">
+  <div class="card">
+    <h2>🎂 Happy Birthday Ishu 🎂</h2>
+    <p>
+      Happy birthday, my love and my everything. 💕<br><br>
+      You bring joy and light to my life every single day. ✨<br><br>
+      May God bless you with endless happiness, may you never face any sorrow,
+      and may your future be bright and beautiful. 🌈<br><br>
+      I promise to always be by your side, forever. 🤝❤️<br><br>
+      <b>Ishu… I love you so, so much. 😘💖</b>
+    </p>
+    <button onclick="show('finalLove')">One Last Thing 💖</button>
+  </div>
+</div>
+
+<!-- FINAL LOVE PAGE -->
+<div id="finalLove" class="screen">
+  <div class="card">
+    <h2>Once again… 💖</h2>
+    <p>
+      🎂 <b>Happy Birthday Ishu 🐼</b> 🎂<br><br>
+      You make my world brighter, happier, and more beautiful just by being in it. ✨<br><br>
+      Thank you for being you, for loving me, and for sharing your heart with mine. 💞<br><br>
+      Today, tomorrow, and always — I choose you. ❤️
+    </p>
+    <div class="signature">— Forever Yours 💕</div>
+  </div>
+</div>
+
+<script>
+function show(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+setTimeout(()=>show('cutie'),2500);
+
+function blow(){
+  const candle=document.getElementById('candle');
+  const button=event.target;
+  
+  // First, light the candle
+  if(!candle.classList.contains('lit')){
+    candle.classList.add('lit');
+    button.disabled=true;
+    button.style.opacity='0.6';
+    button.innerText='🔥 Candle Lit!';
+    
+    // After 3 seconds, blow the candle and proceed
+    setTimeout(()=>{
+      candle.classList.add('blow');
+      setTimeout(()=>show('balloon'),1500);
+    },3000);
+  }
+}
+
+let popped=0;
+function pop(el,text){
+  if(el.classList.contains('pop'))return;
+  el.classList.add('pop');
+
+  const r=el.getBoundingClientRect();
+  const t=document.createElement("div");
+  t.className="pop-text";
+  t.innerText=text;
+  t.style.left=r.left+"px";
+  t.style.top=r.top+"px";
+  document.body.appendChild(t);
+  setTimeout(()=>t.remove(),2000);
+
+  popped++;
+  if(popped===4){
+    document.getElementById('nextBtn').style.display='block';
+  }
+}
+
+/* FLOATING HEARTS GENERATOR */
+function createHearts(){
+  const hearts=document.querySelector('.hearts');
+  setInterval(()=>{
+    const h=document.createElement('div');
+    h.className='heart';
+    h.innerText='💖';
+    h.style.left=Math.random()*100+"%";
+    h.style.animationDuration=(5+Math.random()*5)+"s";
+    h.style.animationDelay=(Math.random()*2)+"s";
+    hearts.appendChild(h);
+    setTimeout(()=>h.remove(),12000);
+  },800);
+}
+
+createHearts();
+</script>
+
+</body>
+</html>
